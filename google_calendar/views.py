@@ -28,7 +28,7 @@ class GoogleCalendarRedirectView(APIView):
         if not flow.credentials.valid:
             if flow.credentials.expired and flow.credentials.refresh_token:
                 flow.credentials.refresh(Request())
-        service = build('calendar', 'v3', credentials=flow.credentials)
+        service = build('calendar', 'v3', credentials=flow.credentials, static_discovery=False)
         events_result = service.events().list(calendarId='primary').execute()
         events = events_result.get('items', [])
         return Response({'events': events},status = status.HTTP_200_OK)
